@@ -1,8 +1,6 @@
 package payments;
 
 import dbUtil.dbConnection;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -11,19 +9,16 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
+import javafx.util.Callback;
 
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class PaymentsController implements Initializable {
@@ -39,9 +34,13 @@ public class PaymentsController implements Initializable {
     @FXML
     private ComboBox<String> paymentsType;
     @FXML
-    private ComboBox<String> paymentsTypeSearch;
-    /*@FXML
-    private ComboBox<String> testCombo;*/
+    private ComboBox<String> comboBoxSearch;
+    @FXML
+    private Button addPaymentButton;
+    @FXML
+    private Button editPaymentButton;
+    @FXML
+    private TextField textFieldForSearchByComboBoxSearch;
     @FXML
     private DatePicker date;
     @FXML
@@ -65,7 +64,12 @@ public class PaymentsController implements Initializable {
     @FXML
     private ListView<String> paymentTypeListView;
     @FXML
-    TextField paymentTypeTextField;
+    private TextField paymentTypeTextField;
+    @FXML
+    private Label sumOfAmountRecognized;
+    @FXML
+    private Label sumOfAmountSpent;
+
 
     private dbConnection dc;
     private ObservableList<PaymentsData> data;
@@ -74,21 +78,58 @@ public class PaymentsController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        this.dc = new dbConnection();
-        this.paymentsTable.setEditable(true);
-        this.paymentsTable.setTableMenuButtonVisible(true);
+        dc = new dbConnection();
+        //paymentsTable.setEditable(true);
+        paymentsTable.setTableMenuButtonVisible(true);
+        this.nameColumn.setCellFactory(tc -> {
+            TableCell<PaymentsData, String> cell = new TableCell<>();
+            Text text = new Text();
+            cell.setGraphic(text);
+            cell.setPrefHeight(Control.USE_COMPUTED_SIZE);
+            text.wrappingWidthProperty().bind(this.nameColumn.widthProperty());
+            text.textProperty().bind(cell.itemProperty());
+            return cell ;
+        });
 
-
+        this.invoiceColumn.setCellFactory(tc -> {
+            TableCell<PaymentsData, String> cell = new TableCell<>();
+            Text text = new Text();
+            cell.setGraphic(text);
+            cell.setPrefHeight(Control.USE_COMPUTED_SIZE);
+            text.wrappingWidthProperty().bind(this.invoiceColumn.widthProperty());
+            text.textProperty().bind(cell.itemProperty());
+            return cell ;
+        });
         loadPaymentData("SELECT * FROM payments");
         loadPaymentTypes();
-        this.paymentsTypeSearch.valueProperty().addListener(new ChangeListener<String>() {
-            @Override public void changed(ObservableValue ov, String oldVal, String newVal) {
-                if(oldVal != newVal){
-                    if(newVal == "Wszystkie") loadPaymentData("SELECT * FROM payments");
-                    else loadPaymentData("Select * FROM payments WHERE paymentsType = '"+ newVal +"'");
+        loadComboxBoxSearch();
+
+        this.paymentsTable.setRowFactory( tv -> {
+            TableRow<PaymentsData> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
+                    PaymentsData rowData = row.getItem();
+                    fillDataRowToFormForEdit(rowData);
                 }
-            }
+            });
+            return row ;
         });
+
+    }
+
+    private void fillDataRowToFormForEdit(PaymentsData rowData) {
+        this.editPaymentButton.setVisible(!this.editPaymentButton.isVisible());
+        this.addPaymentButton.setVisible(!this.addPaymentButton.isVisible());
+        if(this.editPaymentButton.isVisible()){
+            this.name.setText(rowData.getName());
+            this.invoice.setText(rowData.getInvoice());
+            this.amountRecognized.setText(String.valueOf(rowData.getAmountRecognized()));
+            this.amountSpent.setText(String.valueOf(rowData.getAmountSpent()));
+            this.paymentsType.setValue(rowData.getPaymentsType());
+            this.date.setValue(rowData.getDate());
+        }
+        else clearFields();
+
     }
 
     private void loadPaymentData(String sql) {
@@ -104,7 +145,14 @@ public class PaymentsController implements Initializable {
                 this.data.add(new PaymentsData(rs.getInt(1),rs.getString(2),rs.getString(3),rs.getDouble(4),
                         rs.getDouble(5),rs.getString(6), date));
             }
-
+            Double sumOfAmountRecognized = 0.00;
+            Double sumOfAmountSpent = 0.00;
+            for(PaymentsData paymentsData : data) {
+                sumOfAmountRecognized += paymentsData.getAmountRecognized();
+                sumOfAmountSpent += paymentsData.getAmountSpent();
+            }
+            this.sumOfAmountRecognized.setText(sumOfAmountRecognized.toString());
+            this.sumOfAmountSpent.setText(sumOfAmountSpent.toString());
         }catch (SQLException ex){
             ex.printStackTrace();
         }
@@ -117,6 +165,7 @@ public class PaymentsController implements Initializable {
         this.paymentsTypeColumn.setCellValueFactory(new PropertyValueFactory<PaymentsData, String>("paymentsType"));
         this.dateColumn.setCellValueFactory(new PropertyValueFactory<PaymentsData, LocalDate>("date"));
 
+
         this.paymentsTable.setItems(null);
         this.paymentsTable.setItems(this.data);
     }
@@ -125,41 +174,43 @@ public class PaymentsController implements Initializable {
         try {
             Connection conn = dbConnection.getConnection();
             ObservableList<String>  data = FXCollections.observableArrayList();
-            ObservableList<String>  dataForPaymentsTypeSearch = FXCollections.observableArrayList();
             ResultSet rs = conn.createStatement().executeQuery("SELECT name FROM paymentsType");
             while(rs.next()){
                 data.add(rs.getString(1));
-                dataForPaymentsTypeSearch.add(rs.getString(1));
-
             }
-            dataForPaymentsTypeSearch.add("Wszystkie");
-            this.paymentsType.setItems(data);
-            this.paymentsTypeSearch.setItems(dataForPaymentsTypeSearch);
-            this.paymentTypeListView.setItems(data);
-            //this.paymentTypeScrollPane.setContent(listPaymentType);
 
+            this.paymentsType.setItems(data);
+            this.paymentTypeListView.setItems(data);
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    /*private void loadTest() {
-        try {
-            Connection conn = dbConnection.getConnection();
-            ObservableList<String>  data = FXCollections.observableArrayList();
-            data.add("")
-            dataForPaymentsTypeSearch.add("Wszystkie");
-            this.paymentsType.setItems(data);
-            this.paymentsTypeSearch.setItems(dataForPaymentsTypeSearch);
-            this.paymentTypeListView.setItems(data);
-            //this.paymentTypeScrollPane.setContent(listPaymentType);
+    private void loadComboxBoxSearch() {
+        this.comboBoxSearch.getItems().addAll(
+                "Nazwa",
+                "Numer faktury",
+                "Rodzaj"
+        );
+        this.comboBoxSearch.setValue("Rodzaj");
+    }
 
-
-        } catch (SQLException e) {
-            e.printStackTrace();
+    @FXML
+    private void showPaymentsByComboBoxSearchAndTextField(ActionEvent event){
+        String sql;
+        String column = null;
+        switch (comboBoxSearch.getValue()){
+            case "Nazwa": column = "name"; break;
+            case "Numer faktury": column = "invoice"; break;
+            case "Rodzaj": column = "paymentsType"; break;
         }
-    }*/
+        if(!textFieldForSearchByComboBoxSearch.getText().equals(""))
+            sql = "SELECT * FROM  payments WHERE "+column+" LIKE '"+textFieldForSearchByComboBoxSearch.getText()+"'";
+        else sql = "SELECT * FROM payments";
+        loadPaymentData(sql);
+
+    }
 
 
     @FXML
@@ -179,19 +230,11 @@ public class PaymentsController implements Initializable {
 
             stmt.execute();
             conn.close();
-
-            if(this.paymentsTypeSearch.getValue() == "Wszystkie"){
-                loadPaymentData("SELECT * FROM payments");
-            }
-            else loadPaymentData("Select * FROM payments WHERE paymentsType = '"+ this.paymentsTypeSearch.getValue() +"'");
+            loadPaymentData("SELECT * FROM payments");
 
             clearFields();
 
         }catch (SQLException ex){
-            /*String error = ex.getMessage();
-            if(error.equals("[SQLITE_CONSTRAINT]  Abort due to constraint violation (UNIQUE constraint failed: payments.number)"))
-                error = "płatność o takim numerze już istnieje";
-            labelError.setText("Błąd: "+error);*/
             ex.printStackTrace();
         }
 
@@ -210,42 +253,12 @@ public class PaymentsController implements Initializable {
             conn.close();
 
             loadPaymentTypes();
-            this.paymentTypeTextField.setText("");
+            this.paymentTypeTextField.setText("SELECT * FROM payments");
 
         }catch (SQLException ex){
-            /*String error = ex.getMessage();
-            if(error.equals("[SQLITE_CONSTRAINT]  Abort due to constraint violation (UNIQUE constraint failed: payments.number)"))
-                error = "płatność o takim numerze już istnieje";
-            labelError.setText("Błąd: "+error);*/
             ex.printStackTrace();
         }
 
-    }
-
-    @FXML
-    private void updatePayment(ActionEvent event){
-
-        /*String sqlInsert = "UPDATE payments SET number = ? ,name=? ,amount=?,paymentsType=?,date=? WHERE number = 1";
-
-        try {
-            Connection conn = dbConnection.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sqlInsert);
-
-            stmt.setString(1 ,this.number.getText());
-            stmt.setString(2,this.name.getText());
-            stmt.setString(3,this.amount.getText());
-            stmt.setString(4,this.paymentsType.getText());
-            stmt.setString(5,this.date.getEditor().getText());
-
-            stmt.execute();
-            conn.close();
-
-            loadPaymentData();
-            clearFields();
-
-        }catch (SQLException ex){
-            ex.printStackTrace();
-        }*/
     }
 
     private void clearFields(){
@@ -253,16 +266,18 @@ public class PaymentsController implements Initializable {
         this.invoice.setText("");
         this.amountRecognized.setText("");
         this.amountSpent.setText("");
-        this.paymentsType.setPromptText("Rodzaj płatności");
+        this.paymentsType.setValue(null);
         this.date.setValue(null);
     }
+
+
 
     @FXML
     private void showPaymentTypePane(ActionEvent event) {
         this.paymentTypeSettingPane.setVisible(!this.paymentTypeSettingPane.isVisible());
     }
 
-
-
-
+    @FXML
+    public void editPayment(ActionEvent event) {
+    }
 }

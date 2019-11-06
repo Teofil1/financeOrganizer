@@ -54,9 +54,11 @@ public class LoginController implements Initializable {
                 PaymentsController paymentsController = (PaymentsController) loader.getController();
 
                 Scene scene = new Scene(root);
+                scene.getStylesheets().add("/payments/style.css");
                 paymentStage.setScene(scene);
                 paymentStage.setTitle("Finance Organizer");
-                paymentStage.setResizable(false);
+                //paymentStage.setResizable(false);
+
                 paymentStage.show();
 
             }else{

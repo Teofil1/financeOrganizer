@@ -15,160 +15,222 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="payments.PaymentsController">
+<AnchorPane minHeight="0.0" minWidth="0.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="payments.PaymentsController">
    <children>
-      <HBox prefHeight="720.0" prefWidth="1280.0">
+      <HBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <VBox prefHeight="720.0" prefWidth="290.0" style="-fx-background-color: #FFE5CC;">
+            <AnchorPane>
                <children>
-                  <Label prefHeight="30.0" prefWidth="305.0" text="Dodaj płatność">
-                     <padding>
-                        <Insets left="60.0" />
-                     </padding>
-                     <font>
-                        <Font size="25.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets bottom="10.0" top="30.0" />
-                     </VBox.margin>
-                  </Label>
-                  <TextField fx:id="name" promptText="Nazwa">
-                     <VBox.margin>
-                        <Insets left="15.0" right="15.0" top="5.0" />
-                     </VBox.margin>
-                  </TextField>
-                  <TextField fx:id="invoice" layoutX="10.0" layoutY="40.0" promptText="Numer faktury">
-                     <VBox.margin>
-                        <Insets left="15.0" right="15.0" top="5.0" />
-                     </VBox.margin>
-                  </TextField>
-                  <TextField fx:id="amountRecognized" layoutX="10.0" layoutY="66.0" promptText="Kwota przyznana">
-                     <VBox.margin>
-                        <Insets left="15.0" right="15.0" top="5.0" />
-                     </VBox.margin>
-                  </TextField>
-                  <TextField fx:id="amountSpent" promptText="Kwota wydatkowana">
-                     <VBox.margin>
-                        <Insets left="15.0" right="15.0" top="5.0" />
-                     </VBox.margin>
-                  </TextField>
-                  <ComboBox fx:id="paymentsType" prefHeight="26.0" prefWidth="341.0" promptText="Rodzaj płatności">
-                     <VBox.margin>
-                        <Insets left="15.0" right="15.0" top="5.0" />
-                     </VBox.margin>
-                  </ComboBox>
-                  <DatePicker fx:id="date" editable="false" prefHeight="26.0" prefWidth="256.0" promptText="Data płatności">
-                     <VBox.margin>
-                        <Insets left="15.0" right="15.0" top="5.0" />
-                     </VBox.margin>
-                  </DatePicker>
-                  <Button mnemonicParsing="false" onAction="#addPayment" prefHeight="26.0" prefWidth="316.0" style="-fx-background-color: green;" text="Dodaj" textFill="WHITE">
-                     <VBox.margin>
-                        <Insets left="15.0" right="15.0" top="20.0" />
-                     </VBox.margin>
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Button>
-                  <Button mnemonicParsing="false" onAction="#showPaymentTypePane" prefHeight="26.0" prefWidth="316.0" style="-fx-background-color: #f7991e;" text="Edytuj rodzaje płatności" textFill="WHITE">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets left="15.0" right="15.0" top="10.0" />
-                     </VBox.margin>
-                  </Button>
-                  <Pane fx:id="paymentTypeSettingPane" prefHeight="286.0" prefWidth="233.0" visible="false">
+                  <VBox prefHeight="686.0" prefWidth="300.0" style="-fx-background-color: #FFE5CC;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <VBox prefHeight="276.0" prefWidth="257.0">
+                        <Label prefHeight="30.0" prefWidth="305.0" text="Dodaj płatność">
+                           <padding>
+                              <Insets left="60.0" />
+                           </padding>
+                           <font>
+                              <Font size="25.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets bottom="10.0" top="30.0" />
+                           </VBox.margin>
+                        </Label>
+                        <TextField fx:id="name" promptText="Nazwa">
+                           <VBox.margin>
+                              <Insets left="15.0" right="15.0" top="5.0" />
+                           </VBox.margin>
+                        </TextField>
+                        <TextField fx:id="invoice" layoutX="10.0" layoutY="40.0" promptText="Numer faktury">
+                           <VBox.margin>
+                              <Insets left="15.0" right="15.0" top="5.0" />
+                           </VBox.margin>
+                        </TextField>
+                        <TextField fx:id="amountRecognized" layoutX="10.0" layoutY="66.0" promptText="Kwota przyznana">
+                           <VBox.margin>
+                              <Insets left="15.0" right="15.0" top="5.0" />
+                           </VBox.margin>
+                        </TextField>
+                        <TextField fx:id="amountSpent" promptText="Kwota wydatkowana">
+                           <VBox.margin>
+                              <Insets left="15.0" right="15.0" top="5.0" />
+                           </VBox.margin>
+                        </TextField>
+                        <ComboBox fx:id="paymentsType" prefHeight="26.0" prefWidth="341.0" promptText="Rodzaj płatności">
+                           <VBox.margin>
+                              <Insets left="15.0" right="15.0" top="5.0" />
+                           </VBox.margin>
+                        </ComboBox>
+                        <DatePicker fx:id="date" editable="false" prefHeight="26.0" prefWidth="256.0" promptText="Data płatności">
+                           <VBox.margin>
+                              <Insets left="15.0" right="15.0" top="5.0" />
+                           </VBox.margin>
+                        </DatePicker>
+                        <AnchorPane>
                            <children>
-                              <AnchorPane prefHeight="371.0" prefWidth="258.0">
+                              <Button fx:id="editPaymentButton" mnemonicParsing="false" onAction="#editPayment" style="-fx-background-color: #358de4;" text="Edytuj płatność" textFill="WHITE" visible="false" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="20.0">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Button>
+                              <Button fx:id="addPaymentButton" mnemonicParsing="false" onAction="#addPayment" style="-fx-background-color: green;" text="Dodaj płatność" textFill="WHITE" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="20.0">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Button>
+                           </children>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </AnchorPane>
+                        <Button mnemonicParsing="false" onAction="#showPaymentTypePane" prefHeight="26.0" prefWidth="316.0" style="-fx-background-color: #f7991e;" text="Edytuj rodzaje płatności" textFill="WHITE">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="15.0" right="15.0" top="10.0" />
+                           </VBox.margin>
+                        </Button>
+                        <Pane fx:id="paymentTypeSettingPane" prefHeight="286.0" prefWidth="316.0" visible="false">
+                           <children>
+                              <VBox prefHeight="278.0" prefWidth="270.0">
                                  <children>
-                                    <ListView fx:id="paymentTypeListView" prefHeight="241.0" prefWidth="258.0" />
+                                    <AnchorPane>
+                                       <children>
+                                          <ListView fx:id="paymentTypeListView" prefHeight="241.0" prefWidth="258.0" />
+                                       </children>
+                                    </AnchorPane>
+                                    <HBox prefHeight="34.0" prefWidth="257.0">
+                                       <children>
+                                          <TextField fx:id="paymentTypeTextField" prefHeight="26.0" prefWidth="198.0">
+                                             <HBox.margin>
+                                                <Insets top="10.0" />
+                                             </HBox.margin>
+                                          </TextField>
+                                          <Button mnemonicParsing="false" onAction="#addPaymentType" prefHeight="26.0" prefWidth="58.0" style="-fx-background-color: green;" text="Dodaj" textFill="WHITE">
+                                             <HBox.margin>
+                                                <Insets top="10.0" />
+                                             </HBox.margin>
+                                          </Button>
+                                       </children>
+                                    </HBox>
                                  </children>
-                              </AnchorPane>
-                              <HBox prefHeight="34.0" prefWidth="257.0">
+                              </VBox>
+                           </children>
+                           <VBox.margin>
+                              <Insets left="15.0" right="15.0" top="30.0" />
+                           </VBox.margin>
+                        </Pane>
+                     </children>
+                  </VBox>
+               </children>
+            </AnchorPane>
+            <AnchorPane HBox.hgrow="ALWAYS">
+               <children>
+                  <VBox style="-fx-background-color: white;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <AnchorPane>
+                           <children>
+                              <HBox AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="10.0">
                                  <children>
-                                    <TextField fx:id="paymentTypeTextField" prefHeight="26.0" prefWidth="198.0">
+                                    <ComboBox fx:id="comboBoxSearch" prefWidth="150.0">
                                        <HBox.margin>
-                                          <Insets top="10.0" />
+                                          <Insets />
+                                       </HBox.margin>
+                                    </ComboBox>
+                                    <TextField fx:id="textFieldForSearchByComboBoxSearch" prefHeight="26.0" prefWidth="207.0">
+                                       <HBox.margin>
+                                          <Insets />
                                        </HBox.margin>
                                     </TextField>
-                                    <Button mnemonicParsing="false" onAction="#addPaymentType" prefHeight="26.0" prefWidth="58.0" style="-fx-background-color: green;" text="Dodaj" textFill="WHITE">
+                                    <Button mnemonicParsing="false" onAction="#showPaymentsByComboBoxSearchAndTextField" prefWidth="50.0" text="Pokaż">
                                        <HBox.margin>
-                                          <Insets top="10.0" />
+                                          <Insets />
                                        </HBox.margin>
                                     </Button>
                                  </children>
                               </HBox>
+                              <HBox AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="10.0">
+                                 <children>
+                                    <Label prefHeight="30.0" prefWidth="70.0" text="Wyszukaj">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets />
+                                       </HBox.margin>
+                                    </Label>
+                                    <TextField prefHeight="26.0" prefWidth="198.0">
+                                       <HBox.margin>
+                                          <Insets />
+                                       </HBox.margin>
+                                    </TextField>
+                                 </children>
+                              </HBox>
                            </children>
-                        </VBox>
+                        </AnchorPane>
+                        <TableView fx:id="paymentsTable" editable="true" prefHeight="586.0" prefWidth="978.0" VBox.vgrow="ALWAYS">
+                           <columns>
+                              <TableColumn fx:id="idColumn" prefWidth="76.79998779296875" text="Numer" />
+                              <TableColumn fx:id="nameColumn" prefWidth="146.3999786376953" text="Nazwa" />
+                              <TableColumn fx:id="invoiceColumn" prefWidth="158.39996337890625" text="Numer faktury" />
+                              <TableColumn fx:id="amountRecognizedColumn" prefWidth="125.0" text="Kwota przyznana" />
+                              <TableColumn fx:id="amountSpentColumn" prefWidth="125.0" text="Kwota wydatkowana" />
+                              <TableColumn fx:id="paymentsTypeColumn" prefWidth="163.2000732421875" text="Rodzaj" />
+                              <TableColumn fx:id="dateColumn" prefWidth="137.5999755859375" text="data" />
+                           </columns>
+                           <VBox.margin>
+                              <Insets bottom="20.0" left="10.0" right="10.0" />
+                           </VBox.margin>
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
+                        </TableView>
+                        <HBox>
+                           <children>
+                              <Label prefHeight="22.0" prefWidth="186.0" text="Suma kwot przyznanych:" textFill="#3f8a30">
+                                 <HBox.margin>
+                                    <Insets />
+                                 </HBox.margin>
+                                 <font>
+                                    <Font name="System Bold Italic" size="15.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="sumOfAmountRecognized" prefHeight="22.0" prefWidth="300.0" textFill="#3f8a30">
+                                 <font>
+                                    <Font name="System Bold Italic" size="15.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                           <VBox.margin>
+                              <Insets bottom="10.0" left="30.0" />
+                           </VBox.margin>
+                        </HBox>
+                        <HBox>
+                           <children>
+                              <Label prefHeight="22.0" prefWidth="210.0" text="Suma kwot wydatkowanych:" textFill="#8c6b31">
+                                 <HBox.margin>
+                                    <Insets />
+                                 </HBox.margin>
+                                 <font>
+                                    <Font name="System Bold Italic" size="15.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="sumOfAmountSpent" prefHeight="22.0" prefWidth="300.0" textFill="#8c6b31">
+                                 <font>
+                                    <Font name="System Bold Italic" size="15.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                           <VBox.margin>
+                              <Insets bottom="20.0" left="30.0" />
+                           </VBox.margin>
+                        </HBox>
                      </children>
-                     <VBox.margin>
-                        <Insets left="15.0" right="15.0" top="30.0" />
-                     </VBox.margin>
-                  </Pane>
+                  </VBox>
                </children>
-            </VBox>
-            <VBox prefHeight="720.0" prefWidth="990.0" style="-fx-background-color: white;">
-               <children>
-                  <HBox prefHeight="82.0" prefWidth="990.0">
-                     <children>
-                        <Label prefHeight="26.0" prefWidth="128.0" text="Pokaż dla rodzaju">
-                           <font>
-                              <Font size="16.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets left="20.0" top="20.0" />
-                           </HBox.margin>
-                        </Label>
-                        <ComboBox fx:id="paymentsTypeSearch" prefHeight="26.0" prefWidth="191.0" promptText="Wszystkie">
-                           <HBox.margin>
-                              <Insets top="20.0" />
-                           </HBox.margin>
-                        </ComboBox>
-                        <ComboBox fx:id="testCombo" prefWidth="150.0" />
-                        <TextField fx:id="testField" />
-                        <Button mnemonicParsing="false" onAction="#showTest" prefWidth="50.0" text="Button" />
-                        <Label prefHeight="30.0" prefWidth="42.0" text="Wyszukaj">
-                           <font>
-                              <Font size="16.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets left="350.0" top="20.0" />
-                           </HBox.margin>
-                        </Label>
-                        <TextField prefHeight="26.0" prefWidth="198.0">
-                           <HBox.margin>
-                              <Insets top="20.0" />
-                           </HBox.margin>
-                        </TextField>
-                     </children>
-                  </HBox>
-                  <TableView fx:id="paymentsTable" prefHeight="598.0" prefWidth="970.0">
-                     <columns>
-                        <TableColumn fx:id="idColumn" prefWidth="76.79998779296875" text="Numer" />
-                        <TableColumn fx:id="nameColumn" prefWidth="146.3999786376953" text="Nazwa" />
-                        <TableColumn fx:id="invoiceColumn" prefWidth="158.39996337890625" text="Numer faktury" />
-                        <TableColumn fx:id="amountRecognizedColumn" prefWidth="125.0" text="Kwota przyznana" />
-                        <TableColumn fx:id="amountSpentColumn" prefWidth="125.0" text="Kwota wydatkowana" />
-                        <TableColumn fx:id="paymentsTypeColumn" prefWidth="163.2000732421875" text="Rodzaj" />
-                        <TableColumn fx:id="dateColumn" prefWidth="137.5999755859375" text="data" />
-                     </columns>
-                     <VBox.margin>
-                        <Insets bottom="10.0" left="10.0" right="10.0" />
-                     </VBox.margin>
-                  </TableView>
-                  <HBox prefHeight="100.0" prefWidth="200.0">
-                     <children>
-                        <Label prefHeight="18.0" prefWidth="137.0" text="Suma kwot przyznanych:" />
-                        <Label text="Label" />
-                        <Label prefHeight="18.0" prefWidth="137.0" text="Suma kwot przyznanych:" />
-                        <Label text="Label" />
-                     </children>
-                  </HBox>
-               </children>
-            </VBox>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </AnchorPane>
          </children>
       </HBox>
    </children>
