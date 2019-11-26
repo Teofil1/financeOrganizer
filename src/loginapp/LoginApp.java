@@ -13,9 +13,12 @@ public class LoginApp extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("login.fxml"));
 
         Scene scene = new Scene(root);
+        scene.getStylesheets().add("/payments/style.css");
         primaryStage.setTitle("Finance Organizer");
+        primaryStage.setResizable(false);
         primaryStage.setScene(scene);
         primaryStage.show();
+
     }
 
 

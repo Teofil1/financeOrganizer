@@ -4,5 +4,5 @@
 }
 
 .button:hover {
-    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.1;
 }

@@ -15,17 +15,17 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane minHeight="0.0" minWidth="0.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="payments.PaymentsController">
+<AnchorPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="payments.PaymentsController">
    <children>
       <HBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <AnchorPane>
                <children>
-                  <VBox prefHeight="686.0" prefWidth="300.0" style="-fx-background-color: #FFE5CC;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <VBox id="buttonCancelEditPayment" prefHeight="686.0" prefWidth="300.0" style="-fx-background-color: #FFE5CC;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <Label prefHeight="30.0" prefWidth="305.0" text="Dodaj płatność">
+                        <Label prefHeight="30.0" prefWidth="305.0" text="Organizacja finansów">
                            <padding>
-                              <Insets left="60.0" />
+                              <Insets left="35.0" />
                            </padding>
                            <font>
                               <Font size="25.0" />
@@ -59,18 +59,30 @@
                               <Insets left="15.0" right="15.0" top="5.0" />
                            </VBox.margin>
                         </ComboBox>
-                        <DatePicker fx:id="date" editable="false" prefHeight="26.0" prefWidth="256.0" promptText="Data płatności">
+                        <DatePicker fx:id="date" editable="false" prefHeight="26.0" prefWidth="307.0" promptText="Data płatności">
                            <VBox.margin>
                               <Insets left="15.0" right="15.0" top="5.0" />
                            </VBox.margin>
                         </DatePicker>
                         <AnchorPane>
                            <children>
-                              <Button fx:id="editPaymentButton" mnemonicParsing="false" onAction="#editPayment" style="-fx-background-color: #358de4;" text="Edytuj płatność" textFill="WHITE" visible="false" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="20.0">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                              </Button>
+                              <HBox AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="20.0">
+                                 <children>
+                                    <Button fx:id="editPaymentButton" mnemonicParsing="false" prefHeight="39.0" prefWidth="202.0" style="-fx-background-color: #358de4;" text="Edytuj płatność" textFill="WHITE" visible="false">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font>
+                                    </Button>
+                                    <Button fx:id="cancelEditPaymentButton" mnemonicParsing="false" onAction="#cancelEditPayment" prefHeight="39.0" prefWidth="120.0" style="-fx-background-color: #FF3535;" text="Cofnij" textFill="WHITE" visible="false">
+                                       <HBox.margin>
+                                          <Insets left="10.0" />
+                                       </HBox.margin>
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font>
+                                    </Button>
+                                 </children>
+                              </HBox>
                               <Button fx:id="addPaymentButton" mnemonicParsing="false" onAction="#addPayment" style="-fx-background-color: green;" text="Dodaj płatność" textFill="WHITE" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="20.0">
                                  <font>
                                     <Font size="18.0" />
@@ -89,13 +101,13 @@
                               <Insets left="15.0" right="15.0" top="10.0" />
                            </VBox.margin>
                         </Button>
-                        <Pane fx:id="paymentTypeSettingPane" prefHeight="286.0" prefWidth="316.0" visible="false">
+                        <Pane fx:id="paymentTypeSettingPane" prefHeight="286.0" prefWidth="330.0" visible="false">
                            <children>
                               <VBox prefHeight="278.0" prefWidth="270.0">
                                  <children>
                                     <AnchorPane>
                                        <children>
-                                          <ListView fx:id="paymentTypeListView" prefHeight="241.0" prefWidth="258.0" />
+                                          <ListView fx:id="paymentTypeListView" prefHeight="242.0" prefWidth="270.0" />
                                        </children>
                                     </AnchorPane>
                                     <HBox prefHeight="34.0" prefWidth="257.0">
@@ -131,6 +143,11 @@
                            <children>
                               <HBox AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="10.0">
                                  <children>
+                                    <Label prefHeight="26.0" prefWidth="158.0" text="Wyszukaj w kolumnie">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </Label>
                                     <ComboBox fx:id="comboBoxSearch" prefWidth="150.0">
                                        <HBox.margin>
                                           <Insets />
@@ -150,7 +167,7 @@
                               </HBox>
                               <HBox AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="10.0">
                                  <children>
-                                    <Label prefHeight="30.0" prefWidth="70.0" text="Wyszukaj">
+                                    <Label prefHeight="2.0" prefWidth="74.0" text="Wyszukaj">
                                        <font>
                                           <Font size="16.0" />
                                        </font>
@@ -158,7 +175,7 @@
                                           <Insets />
                                        </HBox.margin>
                                     </Label>
-                                    <TextField prefHeight="26.0" prefWidth="198.0">
+                                    <TextField fx:id="searchField" prefHeight="26.0" prefWidth="198.0">
                                        <HBox.margin>
                                           <Insets />
                                        </HBox.margin>
@@ -184,7 +201,7 @@
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                            </columnResizePolicy>
                         </TableView>
-                        <HBox>
+                        <HBox style=": ;">
                            <children>
                               <Label prefHeight="22.0" prefWidth="186.0" text="Suma kwot przyznanych:" textFill="#3f8a30">
                                  <HBox.margin>

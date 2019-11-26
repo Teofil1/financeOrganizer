@@ -2,10 +2,7 @@ package payments;
 
 import javafx.beans.property.*;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Date;
 
 public class PaymentsData {
 
@@ -17,7 +14,8 @@ public class PaymentsData {
     private final StringProperty paymentsType;
     private final ObjectProperty<LocalDate> date;
 
-    public PaymentsData(Integer id, String name, String invoice, Double amountRecognized,Double amountSpent, String paymentsType, LocalDate date) {
+
+    public PaymentsData(Integer id, String name, String invoice, Double amountRecognized, Double amountSpent, String paymentsType, LocalDate date) {
         this.id = new SimpleIntegerProperty(id);
         this.name = new SimpleStringProperty(name);
         this.invoice = new SimpleStringProperty(invoice);

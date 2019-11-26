@@ -57,6 +57,8 @@ public class LoginController implements Initializable {
                 scene.getStylesheets().add("/payments/style.css");
                 paymentStage.setScene(scene);
                 paymentStage.setTitle("Finance Organizer");
+                paymentStage.setMinWidth(1200);
+                paymentStage.setMinHeight(720);
                 //paymentStage.setResizable(false);
 
                 paymentStage.show();
@@ -68,24 +70,5 @@ public class LoginController implements Initializable {
             e.printStackTrace();
         }
     }
-
-    /*public void adminLogin() {
-        try {
-            Stage adminStage = new Stage();
-            FXMLLoader loader = new FXMLLoader();
-            Pane root = (Pane) loader.load(getClass().getResource("/payments/paymentsFXML.fxml").openStream());
-
-            PaymentsController paymentsController = (PaymentsController) loader.getController();
-
-            Scene scene = new Scene(root);
-            adminStage.setScene(scene);
-            adminStage.setTitle("Finance Organizer");
-            adminStage.setResizable(false);
-            adminStage.show();
-
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }*/
 
 }
