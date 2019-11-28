@@ -13,9 +13,10 @@ public class PaymentsData {
     private final DoubleProperty amountSpent;
     private final StringProperty paymentsType;
     private final ObjectProperty<LocalDate> date;
+    private final StringProperty fileName;
 
 
-    public PaymentsData(Integer id, String name, String invoice, Double amountRecognized, Double amountSpent, String paymentsType, LocalDate date) {
+    public PaymentsData(Integer id, String name, String invoice, Double amountRecognized, Double amountSpent, String paymentsType, LocalDate date, String fileName) {
         this.id = new SimpleIntegerProperty(id);
         this.name = new SimpleStringProperty(name);
         this.invoice = new SimpleStringProperty(invoice);
@@ -23,6 +24,7 @@ public class PaymentsData {
         this.amountSpent = new SimpleDoubleProperty(amountSpent);
         this.paymentsType = new SimpleStringProperty(paymentsType);
         this.date = new SimpleObjectProperty<>(date);
+        this.fileName = new SimpleStringProperty(fileName);
     }
 
     public int getId() {
@@ -107,5 +109,17 @@ public class PaymentsData {
 
     public void setDate(LocalDate date) {
         this.date.set(date);
+    }
+
+    public String getFileName() {
+        return fileName.get();
+    }
+
+    public StringProperty fileNameProperty() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName.set(fileName);
     }
 }
