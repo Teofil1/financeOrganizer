@@ -12,6 +12,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 
 import java.io.File;
@@ -139,7 +140,8 @@ public class PaymentsController implements Initializable {
 
             MenuItem itemDeletePaymentsType = new MenuItem("Usuń rodzaj płatnośi");
 
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            Alert alertConfirm = new Alert(Alert.AlertType.CONFIRMATION);
+            Alert alertWarning = new Alert(Alert.AlertType.WARNING);
             contextMenuForPayments.getItems().addAll(itemEditPayment, itemDeletePayment, itemUploadFileToPayment, itemDownloadPayment);
             contextMenuForPaymentsTypes.getItems().add(itemDeletePaymentsType);
 
@@ -153,10 +155,10 @@ public class PaymentsController implements Initializable {
                     itemDeletePaymentsType.setOnAction(new EventHandler<ActionEvent>() {
                         @Override
                         public void handle(ActionEvent event) {
-                            alert.setTitle("Confirmation Dialog");
-                            alert.setHeaderText("");
-                            alert.setContentText("Na pewno chcesz usunąć ten rodzaj płatności?");
-                            Optional<ButtonType> result = alert.showAndWait();
+                            alertConfirm.setTitle("Confirmation Dialog");
+                            alertConfirm.setHeaderText("");
+                            alertConfirm.setContentText("Na pewno chcesz usunąć ten rodzaj płatności?");
+                            Optional<ButtonType> result = alertConfirm.showAndWait();
                             if (result.get() == ButtonType.OK) {
                                 deletePaymentsType(cell.getItem());
                             }
@@ -179,10 +181,10 @@ public class PaymentsController implements Initializable {
                             editPaymentButton.setOnAction(new EventHandler<ActionEvent>() {
                                 @Override
                                 public void handle(ActionEvent e) {
-                                    alert.setTitle("Confirmation Dialog");
-                                    alert.setHeaderText("");
-                                    alert.setContentText("Na pewno chcesz zedytować tą płatność?");
-                                    Optional<ButtonType> result = alert.showAndWait();
+                                    alertConfirm.setTitle("Confirmation Dialog");
+                                    alertConfirm.setHeaderText("");
+                                    alertConfirm.setContentText("Na pewno chcesz zedytować tą płatność?");
+                                    Optional<ButtonType> result = alertConfirm.showAndWait();
                                     if (result.get() == ButtonType.OK) {
                                         editPayment(row.getItem());
                                     }
@@ -193,10 +195,10 @@ public class PaymentsController implements Initializable {
                     itemDeletePayment.setOnAction(new EventHandler<ActionEvent>() {
                         @Override
                         public void handle(ActionEvent event) {
-                            alert.setTitle("Confirmation Dialog");
-                            alert.setHeaderText("");
-                            alert.setContentText("Na pewno chcesz usunąć tą płatność?");
-                            Optional<ButtonType> result = alert.showAndWait();
+                            alertConfirm.setTitle("Confirmation Dialog");
+                            alertConfirm.setHeaderText("");
+                            alertConfirm.setContentText("Na pewno chcesz usunąć tą płatność?");
+                            Optional<ButtonType> result = alertConfirm.showAndWait();
                             if (result.get() == ButtonType.OK) {
                                 deletePayment(row.getItem());
                             }
@@ -211,15 +213,32 @@ public class PaymentsController implements Initializable {
                             if (selectedFile != null) {
                                 Integer id_payment = row.getItem().getId();
                                 if (!row.getItem().getFileName().equals("")) {
-                                    alert.setTitle("Confirmation Dialog");
-                                    alert.setHeaderText("");
-                                    alert.setContentText("Ta płatność już posiada dołączony plik. Nowy plik zastąpi poprzedni. Czy chcesz kontynuować?");
-                                    Optional<ButtonType> result = alert.showAndWait();
+                                    alertConfirm.setTitle("Confirmation Dialog");
+                                    alertConfirm.setHeaderText("");
+                                    alertConfirm.setContentText("Ta płatność już posiada dołączony plik. Nowy plik zastąpi poprzedni. Czy chcesz kontynuować?");
+                                    Optional<ButtonType> result = alertConfirm.showAndWait();
                                     if (result.get() == ButtonType.OK) {
                                         editFile(id_payment, selectedFile);
                                     }
                                 } else {
                                     addFile(id_payment, selectedFile);
+                                }
+                            }
+                        }
+                    });
+                    itemDownloadPayment.setOnAction(new EventHandler<ActionEvent>() {
+                        @Override
+                        public void handle(ActionEvent event) {
+                            if (row.getItem().getFileName().equals("")) {
+                                alertWarning.setTitle("Warning Dialog");
+                                alertWarning.setHeaderText("");
+                                alertWarning.setContentText("Do tej płatności nie jest dołączony plik");
+                                alertWarning.showAndWait();
+                            } else {
+                                DirectoryChooser directoryChooser = new DirectoryChooser();
+                                File selectedDirectory = directoryChooser.showDialog(null);
+                                if (selectedDirectory != null) {
+                                    downloadFile(row.getItem().getId(), selectedDirectory);
                                 }
                             }
                         }
@@ -430,7 +449,12 @@ public class PaymentsController implements Initializable {
                 ex.printStackTrace();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Dialog");
+            alert.setHeaderText("");
+            alert.setContentText("Coś poszło nie tak. Nie udało się zapisać plik");
+
+            alert.showAndWait();
         }
     }
 
@@ -455,6 +479,49 @@ public class PaymentsController implements Initializable {
                 e.printStackTrace();
             }
         } catch (IOException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Dialog");
+            alert.setHeaderText("");
+            alert.setContentText("Coś poszło nie tak. Nie udało się zapisać plik");
+
+            alert.showAndWait();
+        }
+    }
+
+    private void downloadFile(Integer id_payment, File selectedDirectory) {
+        try {
+            PreparedStatement stmt;
+            ResultSet rs;
+            rs = conn.createStatement().executeQuery("SELECT file FROM payments WHERE id =" + id_payment);
+            Integer id_file = rs.getInt(1);
+            rs = conn.createStatement().executeQuery("SELECT originalName, generatedName FROM files WHERE id =" + id_file);
+            String originalName = rs.getString(1);
+            String generatedName = rs.getString(2);
+
+
+            File file = new File(selectedDirectory.getAbsolutePath()+"/"+originalName);
+            int index = 1;
+            String copyOriginalName= originalName;
+            while (file.exists()) {
+                index++;
+                originalName = "(" + index + ")" + copyOriginalName;
+                file = new File(selectedDirectory.getAbsolutePath()+"/"+originalName);
+            }
+            Path copied = Paths.get(selectedDirectory.getAbsolutePath()+"/"+originalName);
+            Path originalPath = Paths.get("uploads/" + generatedName);
+
+            try {
+                Files.copy(originalPath, copied, StandardCopyOption.REPLACE_EXISTING);
+            }catch (IOException e){
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error Dialog");
+                alert.setHeaderText("");
+                alert.setContentText("Coś jest nie tak. Nie udało się odnaleźć plik w tym programie");
+
+                alert.showAndWait();
+            }
+
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
