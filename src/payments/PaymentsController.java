@@ -23,6 +23,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.sql.*;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Optional;
@@ -86,9 +87,6 @@ public class PaymentsController implements Initializable {
     private dbConnection dc;
     private Connection conn;
     private ObservableList<PaymentsData> data;
-
-    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -291,8 +289,8 @@ public class PaymentsController implements Initializable {
                 sumOfAmountRecognized += paymentsData.getAmountRecognized();
                 sumOfAmountSpent += paymentsData.getAmountSpent();
             }
-            this.sumOfAmountRecognized.setText(sumOfAmountRecognized.toString());
-            this.sumOfAmountSpent.setText(sumOfAmountSpent.toString());
+            this.sumOfAmountRecognized.setText(String.valueOf(Math.round(sumOfAmountRecognized * 100.0) / 100.0));
+            this.sumOfAmountSpent.setText(String.valueOf(Math.round(sumOfAmountSpent * 100.0) / 100.0));
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -314,13 +312,18 @@ public class PaymentsController implements Initializable {
     private void deletePayment(PaymentsData payment) {
         try {
             PreparedStatement stmt;
+            ResultSet rs;
 
             if (!payment.getFileName().equals("")) {
-                ResultSet rs = conn.createStatement().executeQuery("SELECT file FROM payments WHERE id =" + payment.getId());
+                rs = conn.createStatement().executeQuery("SELECT file FROM payments WHERE id =" + payment.getId());
                 Integer id_file = rs.getInt(1);
+                rs = conn.createStatement().executeQuery("SELECT generatedName FROM files WHERE id =" + id_file);
+                String fileGeneratedName = rs.getString(1);
                 stmt = conn.prepareStatement("DELETE FROM files WHERE id = ?");
                 stmt.setInt(1, id_file);
                 stmt.executeUpdate();
+                deleteFile(new File("uploads/"+fileGeneratedName));
+
             }
             stmt = conn.prepareStatement("DELETE FROM payments WHERE id = ?");
             stmt.setInt(1, payment.getId());
@@ -458,6 +461,12 @@ public class PaymentsController implements Initializable {
         }
     }
 
+
+    private void deleteFile(File file) {
+        file.delete();
+    }
+
+
     private void editFile(Integer id_payment, File selectedFile) {
         String originalName = selectedFile.getName();
         String generatedName = UUID.randomUUID() + originalName;
@@ -467,13 +476,16 @@ public class PaymentsController implements Initializable {
             Files.copy(originalPath, copied, StandardCopyOption.REPLACE_EXISTING);
             try {
                 PreparedStatement stmt;
-                ResultSet rs = conn.createStatement().executeQuery("SELECT file FROM payments WHERE id =" + id_payment);
+                ResultSet rs;
+                rs = conn.createStatement().executeQuery("SELECT file FROM payments WHERE id =" + id_payment);
                 Integer id_file = rs.getInt(1);
+                rs = conn.createStatement().executeQuery("SELECT generatedName FROM files WHERE id =" + id_file);
+                String fileGeneratedName = rs.getString(1);
                 stmt = conn.prepareStatement("UPDATE files SET originalName=?, generatedName=? WHERE id =" + id_file);
                 stmt.setString(1, originalName);
                 stmt.setString(2, generatedName);
                 stmt.execute();
-
+                deleteFile(new File("uploads/"+fileGeneratedName));
                 loadPaymentData("SELECT * FROM payments");
             } catch (SQLException e) {
                 e.printStackTrace();
