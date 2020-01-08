@@ -25,8 +25,6 @@ public class LoginController implements Initializable {
     @FXML
     private Label dbstatus;
     @FXML
-    private TextField username;
-    @FXML
     private PasswordField password;
     @FXML
     private Button loginButton;
@@ -36,14 +34,14 @@ public class LoginController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         if (!this.loginModel.isDatabaseConnected()) {
-            this.dbstatus.setText("Not Connected to Database");
+            this.dbstatus.setText("Coś jest nie tak. Nie udało się polączyć z bazą danych");
         }
     }
 
     @FXML
     public void login(ActionEvent event) {
         try {
-            if(this.loginModel.isLogin(this.username.getText(), this.password.getText())){
+            if(this.loginModel.isLogin(this.password.getText())){
                 Stage stage = (Stage)this.loginButton.getScene().getWindow();
                 stage.close();
 
@@ -59,16 +57,36 @@ public class LoginController implements Initializable {
                 paymentStage.setTitle("Finance Organizer");
                 paymentStage.setMinWidth(1200);
                 paymentStage.setMinHeight(720);
-                //paymentStage.setResizable(false);
 
                 paymentStage.show();
 
             }else{
-                this.loginStatus.setText("Wrong Credential");
+                this.loginStatus.setText("Nie poprawne hasło");
             }
         } catch (SQLException | IOException e) {
             e.printStackTrace();
         }
     }
+
+    @FXML
+    public void changePassword(ActionEvent event) {
+        try {
+            Stage changePasswordStage = new Stage();
+            FXMLLoader loader = new FXMLLoader();
+            Pane root = (Pane) loader.load(getClass().getResource("/loginapp/changePassword.fxml").openStream());
+            ChangePasswordController changePasswordController = (ChangePasswordController) loader.getController();
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add("/loginapp/style.css");
+            changePasswordStage.setScene(scene);
+            changePasswordStage.setTitle("Finance Organizer");
+            changePasswordStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+
 
 }

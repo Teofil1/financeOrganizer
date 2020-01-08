@@ -23,8 +23,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.sql.*;
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -84,13 +82,13 @@ public class PaymentsController implements Initializable {
     private Label sumOfAmountSpent;
 
 
-    private dbConnection dc;
+    //private dbConnection dc;
     private Connection conn;
     private ObservableList<PaymentsData> data;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        dc = new dbConnection();
+        //dc = new dbConnection();
         try {
             conn = dbConnection.getConnection();
             paymentsTable.setTableMenuButtonVisible(true);
