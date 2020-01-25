@@ -1,6 +1,5 @@
 package loginapp;
 
-import com.sun.prism.paint.Color;
 import dbUtil.dbConnection;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

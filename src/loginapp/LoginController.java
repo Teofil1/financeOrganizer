@@ -34,7 +34,7 @@ public class LoginController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         if (!this.loginModel.isDatabaseConnected()) {
-            this.dbstatus.setText("Coś jest nie tak. Nie udało się polączyć z bazą danych");
+            this.dbstatus.setText("Nie udało się polączyć z bazą danych");
         }
     }
 
@@ -77,6 +77,7 @@ public class LoginController implements Initializable {
             ChangePasswordController changePasswordController = (ChangePasswordController) loader.getController();
             Scene scene = new Scene(root);
             scene.getStylesheets().add("/loginapp/style.css");
+            changePasswordStage.setResizable(false);
             changePasswordStage.setScene(scene);
             changePasswordStage.setTitle("Finance Organizer");
             changePasswordStage.show();

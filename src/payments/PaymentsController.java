@@ -82,13 +82,15 @@ public class PaymentsController implements Initializable {
     private Label sumOfAmountSpent;
 
 
-    //private dbConnection dc;
+    private String pathForUploadFiles;
     private Connection conn;
     private ObservableList<PaymentsData> data;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         //dc = new dbConnection();
+        pathForUploadFiles = "C:/Users/"+System.getProperty("user.name")+"/AppData/Local/FinanceOrganizerUploads";
+
         try {
             conn = dbConnection.getConnection();
             paymentsTable.setTableMenuButtonVisible(true);
@@ -320,7 +322,7 @@ public class PaymentsController implements Initializable {
                 stmt = conn.prepareStatement("DELETE FROM files WHERE id = ?");
                 stmt.setInt(1, id_file);
                 stmt.executeUpdate();
-                deleteFile(new File("uploads/"+fileGeneratedName));
+                deleteFile(new File(pathForUploadFiles +"/"+fileGeneratedName));
 
             }
             stmt = conn.prepareStatement("DELETE FROM payments WHERE id = ?");
@@ -420,12 +422,16 @@ public class PaymentsController implements Initializable {
     }
 
     private void addFile(Integer id_payment, File selectedFile) {
+        File uploadDir = new File(pathForUploadFiles);
+        if (!uploadDir.exists()) {
+            uploadDir.mkdir();
+        }
         String sqlInsertFile = "INSERT INTO files(originalName, generatedName) VALUES (?,?)";
         String sqlUpdatePayment = "UPDATE payments SET file=? WHERE id =" + id_payment;
 
         String originalName = selectedFile.getName();
         String generatedName = UUID.randomUUID() + originalName;
-        Path copied = Paths.get("uploads/" + generatedName);
+        Path copied = Paths.get(pathForUploadFiles +"/"+ generatedName);
         Path originalPath = selectedFile.toPath();
         try {
             Files.copy(originalPath, copied, StandardCopyOption.REPLACE_EXISTING);
@@ -468,7 +474,7 @@ public class PaymentsController implements Initializable {
     private void editFile(Integer id_payment, File selectedFile) {
         String originalName = selectedFile.getName();
         String generatedName = UUID.randomUUID() + originalName;
-        Path copied = Paths.get("uploads/" + generatedName);
+        Path copied = Paths.get(pathForUploadFiles + "/" + generatedName);
         Path originalPath = selectedFile.toPath();
         try {
             Files.copy(originalPath, copied, StandardCopyOption.REPLACE_EXISTING);
@@ -483,7 +489,7 @@ public class PaymentsController implements Initializable {
                 stmt.setString(1, originalName);
                 stmt.setString(2, generatedName);
                 stmt.execute();
-                deleteFile(new File("uploads/"+fileGeneratedName));
+                deleteFile(new File(pathForUploadFiles +"/"+fileGeneratedName));
                 loadPaymentData("SELECT * FROM payments");
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -518,7 +524,7 @@ public class PaymentsController implements Initializable {
                 file = new File(selectedDirectory.getAbsolutePath()+"/"+originalName);
             }
             Path copied = Paths.get(selectedDirectory.getAbsolutePath()+"/"+originalName);
-            Path originalPath = Paths.get("uploads/" + generatedName);
+            Path originalPath = Paths.get(pathForUploadFiles +"/" + generatedName);
 
             try {
                 Files.copy(originalPath, copied, StandardCopyOption.REPLACE_EXISTING);
