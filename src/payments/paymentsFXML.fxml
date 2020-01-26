@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="payments.PaymentsController">
+<AnchorPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="payments.PaymentsController">
    <children>
       <HBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -163,7 +163,7 @@
                                           <Insets />
                                        </HBox.margin>
                                     </TextField>
-                                    <Button mnemonicParsing="false" onAction="#showPaymentsByComboBoxSearchAndTextField" prefWidth="50.0" text="Pokaż">
+                                    <Button mnemonicParsing="false" onAction="#showPaymentsBySearchOptions" prefWidth="50.0" text="Pokaż">
                                        <HBox.margin>
                                           <Insets />
                                        </HBox.margin>

@@ -88,12 +88,12 @@ public class PaymentsController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        //dc = new dbConnection();
         pathForUploadFiles = "C:/Users/"+System.getProperty("user.name")+"/AppData/Local/FinanceOrganizerUploads";
 
         try {
             conn = dbConnection.getConnection();
             paymentsTable.setTableMenuButtonVisible(true);
+            paymentsTable.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
             this.nameColumn.setCellFactory(tc -> {
                 TableCell<PaymentsData, String> cell = new TableCell<>();
                 Text text = new Text();
@@ -371,7 +371,7 @@ public class PaymentsController implements Initializable {
     }
 
     @FXML
-    private void showPaymentsByComboBoxSearchAndTextField(ActionEvent event) {
+    private void showPaymentsBySearchOptions(ActionEvent event) {
         String sql;
         String column = null;
         switch (comboBoxSearch.getValue()) {

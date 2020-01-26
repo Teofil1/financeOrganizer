@@ -42,27 +42,33 @@ public class ChangePasswordController implements Initializable {
     @FXML
     public void saveNewPassword(ActionEvent event) {
         if(correctInputOfOldPassword()){
-            if (correctRepetitionOfPassword()){
-                Alert alertConfirm = new Alert(Alert.AlertType.CONFIRMATION);
-                alertConfirm.setTitle("Confirmation Dialog");
-                alertConfirm.setHeaderText("");
-                alertConfirm.setContentText("Na pewno chcesz zmienić hasło?");
-                Optional<ButtonType> result = alertConfirm.showAndWait();
-                if (result.get() == ButtonType.OK) {
-                    try {
-                        PreparedStatement stmt = conn.prepareStatement("UPDATE login SET password=?");
-                        stmt.setString(1, this.newPassword.getText());
-                        stmt.execute();
-                        changePasswordStatus.setText("Hasło zostało zmienione");
-                        clearFields();
-                    } catch (SQLException e) {
-                        e.printStackTrace();
+            if (correctNewPassword()){
+                if (correctRepetitionOfPassword()){
+                    Alert alertConfirm = new Alert(Alert.AlertType.CONFIRMATION);
+                    alertConfirm.setTitle("Confirmation Dialog");
+                    alertConfirm.setHeaderText("");
+                    alertConfirm.setContentText("Na pewno chcesz zmienić hasło?");
+                    Optional<ButtonType> result = alertConfirm.showAndWait();
+                    if (result.get() == ButtonType.OK) {
+                        try {
+                            PreparedStatement stmt = conn.prepareStatement("UPDATE login SET password=?");
+                            stmt.setString(1, this.newPassword.getText());
+                            stmt.execute();
+                            changePasswordStatus.setText("Hasło zostało zmienione");
+                            clearFields();
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
                     }
+                }
+                else{
+                    changePasswordStatus.setText("Nie poprawne powtórzenie hasła");
                 }
             }
             else{
-                changePasswordStatus.setText("Nie poprawne powtórzenie hasła");
+                changePasswordStatus.setText("Maksymalna długość hasła 20 znaków");
             }
+
         }
         else{
             changePasswordStatus.setText("Nie poprawne stare hasło");
@@ -81,6 +87,11 @@ public class ChangePasswordController implements Initializable {
 
     private boolean correctRepetitionOfPassword(){
         if(newPassword.getText().equals(repeatedNewPassword.getText())) return true;
+        else return false;
+    }
+
+    private boolean correctNewPassword(){
+        if(newPassword.getText().length() <= 20) return true;
         else return false;
     }
 
