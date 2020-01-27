@@ -3,7 +3,6 @@
     <output-path>$PROJECT_DIR$/out/artifacts/financeOrganizer_jar</output-path>
     <root id="archive" name="financeOrganizer.jar">
       <element id="module-output" name="financeOrganizer" />
-      <element id="extracted-dir" path="C:/Program Files/Java/sqlite-jdbc-3.27.2.1.jar" path-in-jar="/" />
       <element id="extracted-dir" path="C:/Program Files/Java/javafx-sdk-12.0.2/lib/src.zip" path-in-jar="/" />
       <element id="extracted-dir" path="C:/Program Files/Java/javafx-sdk-12.0.2/lib/javafx-swt.jar" path-in-jar="/" />
       <element id="extracted-dir" path="C:/Program Files/Java/javafx-sdk-12.0.2/lib/javafx.web.jar" path-in-jar="/" />
@@ -13,6 +12,7 @@
       <element id="extracted-dir" path="C:/Program Files/Java/javafx-sdk-12.0.2/lib/javafx.swing.jar" path-in-jar="/" />
       <element id="extracted-dir" path="C:/Program Files/Java/javafx-sdk-12.0.2/lib/javafx.controls.jar" path-in-jar="/" />
       <element id="extracted-dir" path="C:/Program Files/Java/javafx-sdk-12.0.2/lib/javafx.graphics.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="C:/Program Files/Java/sqlite-jdbc-3.27.2.1.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>
