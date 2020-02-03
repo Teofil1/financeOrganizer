@@ -92,7 +92,6 @@ public class PaymentsController implements Initializable {
 
         try {
             conn = dbConnection.getConnection();
-            paymentsTable.setTableMenuButtonVisible(true);
             paymentsTable.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
             this.nameColumn.setCellFactory(tc -> {
                 TableCell<PaymentsData, String> cell = new TableCell<>();
@@ -615,8 +614,8 @@ public class PaymentsController implements Initializable {
 
     private boolean validation() {
         Alert alert = new Alert(Alert.AlertType.WARNING);
-        if (this.name.getText().equals("") && this.invoice.getText().equals("") &&
-                this.amountRecognized.getText().equals("") && this.amountSpent.getText().equals("") &&
+        if (this.name.getText().trim().equals("") && this.invoice.getText().trim().equals("") &&
+                this.amountRecognized.getText().trim().equals("") && this.amountSpent.getText().trim().equals("") &&
                 this.paymentsType.getValue() == null && this.date.getValue() == null) {
             alert.setTitle("Warning Dialog");
             alert.setHeaderText("");
